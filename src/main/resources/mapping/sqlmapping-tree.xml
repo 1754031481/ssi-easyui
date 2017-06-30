@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Tree">
+	<typeAlias alias="treeDTO" type="com.jk.model.Tree"/>
+	<resultMap class="treeDTO" id="treeResult">
+		<result property="menuId" column="MENUID"/>
+		<result property="menuTitle" column="MENUTITLE"/>
+		<result property="menuUrl" column="MENUURL"/>
+		<result property="menuIcon" column="MENUICON"/>
+		<result property="parentId" column="PARENTID"/>
+	</resultMap>
+	<!--  查询父节点-->
+	 <select id="treeList" parameterClass="treeDTO" resultMap="treeResult">
+		SELECT * FROM T_TREE  WHERE  PARENTID=#menuId#
+	</select>
+	<!-- 查询子节点 -->
+	<select id="findTreeCount" parameterClass="treeDTO" resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM T_TREE  WHERE  PARENTID=#menuId#
+	</select> 
+	
+</sqlMap>

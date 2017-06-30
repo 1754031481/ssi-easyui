@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Role">
+	<typeAlias alias="roleDto" type="com.jk.model.Role"/>
+	<resultMap class="roleDto" id="roleResult">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<result property="description" column="DESCRIPTION"/>
+		<result property="iconCls" column="ICONCLS"/>
+		<result property="seq" column="SEQ"/>
+		<result property="createdatetime" column="CREATEDATETIME"/>
+		<result property="updatedatetime" column="UPDATEDATETIME"/>
+	</resultMap>
+	
+	<sql id="cls">
+		ID,NAME,DESCRIPTION,ICONCLS,SEQ,CREATEDATETIME,UPDATEDATETIME
+	</sql>
+	
+	<insert id="insertRole" parameterClass="roleDto">
+		INSERT INTO T_ROLE ( NAME,DESCRIPTION,ICONCLS,SEQ,CREATEDATETIME,UPDATEDATETIME) VALUES
+		( #name#,#description#,#iconCls#,#seq#,#createdatetime#,#updatedatetime#)
+	</insert>
+	
+	<delete id="deleteRole" parameterClass="java.util.List" >
+		DELETE FROM T_ROLE WHERE ID IN <iterate open="(" close=")" conjunction="," >#[]#</iterate>
+	</delete>
+	
+	<!-- 分页查询 -->
+	<select id="showPageRole" resultMap="roleResult" parameterClass="java.util.HashMap">
+		SELECT <include refid="cls"/> FROM T_ROLE 
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="name" prepend="AND">
+				NAME LIKE '%$name$%'
+			</isNotEmpty>
+		</dynamic>
+		LIMIT $page$,$rows$
+	</select>
+	
+	<!-- 总条数 -->
+	<select id="countRole" parameterClass="java.util.HashMap" resultClass="long">
+		SELECT COUNT(*) FROM T_ROLE
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="name" prepend="AND">
+				NAME LIKE '%$name$%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 回显 -->
+	<select id="findRoleById" parameterClass="roleDto" resultMap="roleResult">
+		SELECT * FROM T_ROLE WHERE ID=#id#
+	</select>
+	
+	<!-- 修改 -->
+	<update id="updateRole" parameterClass="roleDto" >
+		UPDATE  T_ROLE SET 
+		NAME=#name#,DESCRIPTION=#description#, ICONCLS=#iconCls#,SEQ=#seq#,
+		CREATEDATETIME=#createdatetime#, UPDATEDATETIME=#updatedatetime# WHERE ID=#id#
+	</update>
+	
+</sqlMap>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+	<typeAlias alias="userDTO" type="com.jk.model.User"/>
+	<resultMap class="userDTO" id="userResult">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<result property="pwd" column="PWD"/>
+		<result property="createdatetime" column="CREATEDATETIME"/>
+		<result property="modifydatetime" column="MODIFYDATETIME"/>
+		<result property="imgname" column="IMGNAME"/>
+	</resultMap>
+	
+	<sql id="cls">
+		ID, NAME, PWD, CREATEDATETIME, MODIFYDATETIME,IMGNAME
+	</sql>
+	<!--  注册时间分布报表-->
+	<select id="findUserCreateTime" resultClass="java.util.HashMap" remapResults="true">
+		select t.NAME name,count(*) y from T_USER t where CREATEDATETIME=#createdatetime#
+	</select>
+	
+	
+	<!-- 查询 -->
+	<select id="userList" parameterClass="userDTO" resultMap="userResult">
+	SELECT * from T_USER 
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="name" prepend="AND">
+				NAME LIKE '%$name$%'
+			</isNotEmpty>
+			
+		</dynamic>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="pageUser" parameterClass="java.util.HashMap" resultMap="userResult">
+		SELECT <include refid="cls"/> from T_USER 
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="name" prepend="AND">
+				NAME LIKE '%$name$%'
+			</isNotEmpty>
+			<isNotEmpty property="startDate" prepend="AND">
+				CREATEDATETIME &gt;= #startDate#
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="AND">
+				CREATEDATETIME &lt;= #endDate#
+			</isNotEmpty>
+		</dynamic>
+		limit $page$,$rows$
+	</select>
+	
+	
+	<!--  总条数-->
+	<select id="countUser" parameterClass="java.util.HashMap" resultClass="long">
+		select count(*) from T_USER
+		<dynamic prepend="where">
+			<isNotEmpty property="name" prepend="AND">
+				NAME LIKE '%$name$%'
+			</isNotEmpty>
+			<isNotEmpty property="startDate" prepend="AND">
+				CREATEDATETIME &gt;= #startDate#
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="AND">
+				CREATEDATETIME &lt;= #endDate#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="insertUser" parameterClass="userDTO">
+		INSERT INTO T_USER ( NAME, PWD, CREATEDATETIME, MODIFYDATETIME,IMGNAME) VALUES ( #name#, #pwd#,#createdatetime#,#modifydatetime#,#imgname#)
+	</insert>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteUsers" parameterClass="java.util.List" >
+		DELETE FROM T_USER WHERE ID IN <iterate open="(" close=")" conjunction="," >#[]#</iterate>
+	</delete>
+	
+	<!-- 删除  -->
+	<delete id="deleteUser" parameterClass="userDTO">
+		DELETE FROM T_USER WHERE ID=#id#
+	</delete>
+	<!-- 修改 -->
+	<update id="updateUser" parameterClass="userDTO" >
+		UPDATE   T_USER SET NAME=#name#,PWD=#pwd#, MODIFYDATETIME=#modifydatetime#,IMGNAME=#imgname# WHERE ID=#id#
+	</update>
+	
+	<!-- 回显 -->
+	<select id="showById" parameterClass="userDTO" resultMap="userResult">
+		SELECT * FROM T_USER WHERE ID=#id#
+	</select>
+	
+	<!--  登录-->
+	<select id="login" parameterClass="userDTO" resultMap="userResult">
+		SELECT * FROM T_USER WHERE NAME=#name# AND PWD=#pwd#
+	</select>
+	
+	
+</sqlMap>

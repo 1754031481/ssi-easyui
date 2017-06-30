@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<!DOCTYPE sqlMapConfig    
+    PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"    
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">    
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="false"  
+        lazyLoadingEnabled="false" maxRequests="1000" maxSessions="1000"  
+        maxTransactions="1000" useStatementNamespaces="true" />
+    <sqlMap resource="mapping/sqlmapping-user.xml" /> 
+    <sqlMap resource="mapping/sqlmapping-tree.xml" /> 
+    <sqlMap resource="mapping/sqlmapping-resources.xml" /> 
+    <sqlMap resource="mapping/sqlmapping-role.xml" /> 
+    <sqlMap resource="mapping/sqlmapping-mechanism.xml" /> 
+    <sqlMap resource="mapping/sqlmapping-roleAnduser.xml" /> 
+</sqlMapConfig>

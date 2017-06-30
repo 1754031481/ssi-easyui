@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="roleAndUser">
+	<typeAlias alias="roleAndUserDto" type="com.jk.model.RoleAndUser"/>
+	<resultMap class="roleAndUserDto" id="roleAndUserResult">
+		<result property="ruId" column="ruId"/>
+		<result property="roleId" column="roleId"/>
+		<result property="userId" column="userId"/>
+	</resultMap>
+	
+	
+	<select id="selectWorkloadAnalysis"   resultClass="java.util.HashMap" remapResults="true">
+		select r.name name ,count(*) y from  t_user_role  ru left join t_role r on r.Id=ru.ruId group by r.Id
+	</select>
+	
+	
+	
+	
+</sqlMap>

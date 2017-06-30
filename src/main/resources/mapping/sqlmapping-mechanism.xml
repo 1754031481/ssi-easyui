@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap 
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Mechanism">
+	<typeAlias alias="meanDto" type="com.jk.model.Mechanism"/>
+	<resultMap class="meanDto" id="meanResult">
+		<result property="id" column="ID"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="code" column="CODE"/>
+		<result property="iconCls" column="ICONCLS"/>
+		<result property="name" column="NAME"/>
+		<result property="seq" column="SEQ"/>
+		<result property="createdatetime" column="CREATEDATETIME"/>
+		<result property="updatetime" column="UPDATETIME"/>
+		<result property="parmentid" column="PARMENTID"/>
+	</resultMap>
+	
+	
+	<update id="updateMechanism" parameterClass="meanDto">
+		UPDATE  T_MECHANISM SET ADDRESS=#address#,CODE=#code#,ICONCLS=#iconCls#,NAME=#name#,SEQ=#seq#,CREATEDATETIME=#createdatetime#,UPDATETIME=#updatetime#,PARMENTID=#parmentid#
+	</update>
+	
+	<select id="showMechanism" parameterClass="meanDto" resultMap="meanResult">
+		SELECT * FROM T_MECHANISM WHERE PARMENTID IS NULL ORDER BY seq 
+	</select>
+	<select id="countMechanism" parameterClass="meanDto" resultMap="meanResult">
+		SELECT * FROM T_MECHANISM WHERE  PARMENTID = #id# ORDER BY seq
+	</select>
+	
+	<insert id="addMechanism" parameterClass="meanDto">
+		INSERT INTO T_MECHANISM(ADDRESS,CODE,ICONCLS,NAME,SEQ,CREATEDATETIME,UPDATETIME,PARMENTID) VALUES
+		(#address#,#code#,#iconCls#,#name#,#seq#,#createdatetime#,#updatetime#,#parmentid#)
+	</insert>
+	
+	<delete id="deleteMechanism" parameterClass="meanDto">
+		DELETE FROM T_MECHANISM WHERE ID=#id#
+	</delete>
+	
+	<select id="showMechanismById" parameterClass="meanDto" resultMap="meanResult">
+		SELECT * FROM T_MECHANISM WHERE ID=#id#
+	</select>
+	
+	
+	
+</sqlMap>
